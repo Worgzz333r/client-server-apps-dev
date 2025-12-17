@@ -40,18 +40,17 @@ public class DataInitializer {
 
             // Тестові користувачі
             if (userRepository.count() == 0) {
-                // ЗВИЧАЙНИЙ користувач (тільки перегляд)
                 User user = new User();
                 user.setUsername("user");
                 user.setPassword(passwordEncoder.encode("password"));
-                user.setRole(User.ROLE_USER); // Використовуємо константу
+                user.setRole(User.ROLE_USER);
                 userRepository.save(user);
 
                 // АДМІН (всі права)
                 User admin = new User();
                 admin.setUsername("admin");
                 admin.setPassword(passwordEncoder.encode("admin123"));
-                admin.setRole(User.ROLE_ADMIN); // Використовуємо константу
+                admin.setRole(User.ROLE_ADMIN);
                 userRepository.save(admin);
 
                 System.out.println("✅ Створено тестових користувачів:");
