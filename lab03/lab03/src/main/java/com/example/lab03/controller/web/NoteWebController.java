@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/web/notes")
+@RequestMapping("/web/notes") // Базовий шлях для всіх методів
 public class NoteWebController {
 
     private final NoteService noteService;
