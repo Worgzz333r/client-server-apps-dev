@@ -6,13 +6,13 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "notes")
 public class Note {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // Позначає первинний ключ
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Автоінкремент
     private Long id;
 
-    private String title;
+    private String title; // Назва нотатки
 
-    @Column(length = 2000)
+    @Column(length = 2000) // Обмеження довжини для контенту
     private String content;
 
     private LocalDateTime createdAt;
@@ -27,13 +27,13 @@ public class Note {
     // Гетери і сетери
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
+    // Title з автоматичним оновленням часу
     public String getTitle() { return title; }
     public void setTitle(String title) {
         this.title = title;
         this.updatedAt = LocalDateTime.now();
     }
-
+    // Content з автоматичним оновленням часу
     public String getContent() { return content; }
     public void setContent(String content) {
         this.content = content;
