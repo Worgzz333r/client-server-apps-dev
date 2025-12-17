@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Мої нотатки</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .note {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .actions {
+            margin-top: 10px;
+        }
+        .btn {
+            padding: 8px 16px;
+            margin-right: 5px;
+            text-decoration: none;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<h1>📋 Мої нотатки</h1>
+
+<div style="margin-bottom: 20px;">
+    <a href="/web/notes/create" class="btn btn-primary">➕ Додати нотатку</a>
+    <a href="/logout" class="btn btn-secondary">🚪 Вийти</a>
+    <a href="/" class="btn btn-secondary">🏠 На головну</a>
+</div>
+
+<div th:if="${notes != null and !notes.empty}">
+    <div th:each="note : ${notes}" class="note">
+        <h3 th:text="${note.title}">Заголовок</h3>
+        <p th:text="${note.content}">Текст нотатки...</p>
+        <small>Створено: <span th:text="${#dates.format(note.createdAt, 'dd.MM.yyyy HH:mm')}">дата</span></small>
+
+        <div class="actions">
+            <a th:href="@{'/web/notes/' + ${note.id}}" class="btn btn-primary">Переглянути</a>
+            <a th:href="@{'/web/notes/edit/' + ${note.id}}" class="btn btn-secondary">Редагувати</a>
+            <form th:action="@{'/web/notes/delete/' + ${note.id}}" method="post" style="display: inline;">
+                <button type="submit" style="background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 3px; cursor: pointer;">
+                    Видалити
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:if="${notes == null or notes.empty}" style="text-align: center; padding: 40px;">
+    <h3>😔 Немає нотаток</h3>
+    <p>Створіть свою першу нотатку!</p>
+    <a href="/web/notes/create" class="btn btn-primary">Створити нотатку</a>
+</div>
+</body>
+</html>

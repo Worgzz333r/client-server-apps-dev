@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Вхід у систему</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .error {
+            color: red;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .success {
+            color: green;
+            background: #e6ffe6;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h2>🔐 Вхід у систему</h2>
+
+<!-- Повідомлення про помилку -->
+<div th:if="${error}" class="error">
+    [[${error}]]
+</div>
+
+<!-- Повідомлення про вихід -->
+<div th:if="${message}" class="success">
+    [[${message}]]
+</div>
+
+<!-- ФОРМА ЛОГІНУ (ВАЖЛИВО!) -->
+<form action="/login" method="post">
+    <div>
+        <label for="username">Ім'я користувача:</label>
+        <input type="text"
+               id="username"
+               name="username"  <!-- ОБОВ'ЯЗКОВО "username" -->
+        required
+        autofocus>
+    </div>
+
+    <div>
+        <label for="password">Пароль:</label>
+        <input type="password"
+               id="password"
+               name="password"  <!-- ОБОВ'ЯЗКОВО "password" -->
+        required>
+    </div>
+
+    <button type="submit">Увійти</button>
+</form>
+
+<div style="margin-top: 20px;">
+    <a href="/">На головну</a>
+</div>
+
+<!-- Тестові дані -->
+<div style="margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 5px;">
+    <h4>Тестові облікові дані:</h4>
+    <p><strong>Логін:</strong> user</p>
+    <p><strong>Пароль:</strong> password</p>
+    <p><small>Якщо не працює, спробуй пароль з консолі Spring Boot</small></p>
+</div>
+</body>
+</html>
