@@ -12,6 +12,11 @@ import java.util.List;
 @Table(name = "users")
 @Data
 public class User implements UserDetails {
+
+    // Константи для ролей
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,12 +28,11 @@ public class User implements UserDetails {
     private String password;
 
     @Column(nullable = false)
-    private String role = "ROLE_USER"; // За замовчуванням
+    private String role = ROLE_USER; // За замовчуванням USER
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Переконайтеся, що роль починається з ROLE_
-        return List.of(new SimpleGrantedAuthority(role.startsWith("ROLE_") ? role : "ROLE_" + role));
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     // ... решта методів залишається без змін

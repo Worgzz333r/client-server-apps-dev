@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Мої нотатки</title>
@@ -34,19 +35,47 @@
             background: #6c757d;
             color: white;
         }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .admin-only {
+            border-left: 4px solid #ffc107;
+        }
+        .user-info {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
 <h1>📋 Мої нотатки</h1>
 
+<!-- Інформація про користувача -->
+<div class="user-info">
+    Ви увійшли як: <strong sec:authentication="name"></strong>
+    <span sec:authorize="hasRole('ADMIN')">👑 (Адміністратор)</span>
+    <span sec:authorize="hasRole('USER')">👤 (Користувач)</span>
+</div>
+
+<!-- Кнопки дій (тільки для адмінів) -->
 <div style="margin-bottom: 20px;">
-    <a href="/web/notes/create" class="btn btn-primary">➕ Додати нотатку</a>
+    <a sec:authorize="hasRole('ADMIN')" href="/web/notes/create" class="btn btn-primary">
+        ➕ Додати нотатку
+    </a>
     <a href="/logout" class="btn btn-secondary">🚪 Вийти</a>
     <a href="/" class="btn btn-secondary">🏠 На головну</a>
 </div>
 
+<!-- Список нотаток -->
 <div th:if="${notes != null and !notes.empty}">
-    <div th:each="note : ${notes}" class="note">
+    <div th:each="note : ${notes}" class="note" th:classappend="${#authorization.expression('hasRole(''ADMIN'')')} ? 'admin-only' : ''">
         <h3 th:text="${note.title}">Заголовок</h3>
         <p th:text="${note.content}">Текст нотатки...</p>
         <small>Створено:
@@ -55,11 +84,28 @@
             </span>
         </small>
 
+        <!-- Кнопки дій (різні для різних ролей) -->
         <div class="actions">
-            <a th:href="@{'/web/notes/' + ${note.id}}" class="btn btn-primary">Переглянути</a>
-            <a th:href="@{'/web/notes/edit/' + ${note.id}}" class="btn btn-secondary">Редагувати</a>
-            <form th:action="@{'/web/notes/delete/' + ${note.id}}" method="post" style="display: inline;">
-                <button type="submit" style="background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 3px; cursor: pointer;">
+            <!-- Перегляд - для всіх -->
+            <a th:href="@{'/web/notes/' + ${note.id}}" class="btn btn-primary">
+                Переглянути
+            </a>
+
+            <!-- Редагування - тільки для адмінів -->
+            <a sec:authorize="hasRole('ADMIN')"
+               th:href="@{'/web/notes/edit/' + ${note.id}}"
+               class="btn btn-secondary">
+                Редагувати
+            </a>
+
+            <!-- Видалення - тільки для адмінів -->
+            <form sec:authorize="hasRole('ADMIN')"
+                  th:action="@{'/web/notes/delete/' + ${note.id}}"
+                  method="post"
+                  style="display: inline;">
+                <button type="submit"
+                        class="btn-danger"
+                        onclick="return confirm('Видалити цю нотатку?')">
                     Видалити
                 </button>
             </form>
@@ -67,10 +113,17 @@
     </div>
 </div>
 
+<!-- Повідомлення про відсутність нотаток -->
 <div th:if="${notes == null or notes.empty}" style="text-align: center; padding: 40px;">
     <h3>😔 Немає нотаток</h3>
-    <p>Створіть свою першу нотатку!</p>
-    <a href="/web/notes/create" class="btn btn-primary">Створити нотатку</a>
+    <p sec:authorize="hasRole('ADMIN')">
+        Створіть свою першу нотатку!
+        <br>
+        <a href="/web/notes/create" class="btn btn-primary">Створити нотатку</a>
+    </p>
+    <p sec:authorize="hasRole('USER')">
+        Наразі немає доступних нотаток. Зверніться до адміністратора.
+    </p>
 </div>
 </body>
 </html>

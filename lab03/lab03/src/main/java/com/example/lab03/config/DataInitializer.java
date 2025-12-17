@@ -17,7 +17,7 @@ public class DataInitializer {
                                       UserRepository userRepository,
                                       PasswordEncoder passwordEncoder) {
         return args -> {
-            // Створюємо тестові нотатки тільки якщо база пуста
+            // Тестові нотатки
             if (noteRepository.count() == 0) {
                 Note note1 = new Note();
                 note1.setTitle("Перша нотатка");
@@ -38,25 +38,25 @@ public class DataInitializer {
                 System.out.println("✅ Створено 3 тестові нотатки");
             }
 
-            // Створюємо тестових користувачів
+            // Тестові користувачі
             if (userRepository.count() == 0) {
-                // Користувач
+                // ЗВИЧАЙНИЙ користувач (тільки перегляд)
                 User user = new User();
                 user.setUsername("user");
-                user.setPassword(passwordEncoder.encode("password")); // Шифруємо!
-                user.setRole("ROLE_USER");
+                user.setPassword(passwordEncoder.encode("password"));
+                user.setRole(User.ROLE_USER); // Використовуємо константу
                 userRepository.save(user);
 
-                // Адмін
+                // АДМІН (всі права)
                 User admin = new User();
                 admin.setUsername("admin");
                 admin.setPassword(passwordEncoder.encode("admin123"));
-                admin.setRole("ROLE_ADMIN");
+                admin.setRole(User.ROLE_ADMIN); // Використовуємо константу
                 userRepository.save(admin);
 
                 System.out.println("✅ Створено тестових користувачів:");
-                System.out.println("   👤 user / password");
-                System.out.println("   👑 admin / admin123");
+                System.out.println("   👤 user / password (ROLE_USER) - тільки перегляд");
+                System.out.println("   👑 admin / admin123 (ROLE_ADMIN) - всі права");
             }
         };
     }
