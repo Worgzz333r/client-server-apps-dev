@@ -17,14 +17,14 @@ public class User implements UserDetails {
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // Первинний ключ
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Автоінкремент
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false) // Унікальний логін
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // Пароль
     private String password;
 
     @Column(nullable = false)
@@ -32,10 +32,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Повертає роль як право доступу
         return List.of(new SimpleGrantedAuthority(role));
     }
 
-    // ... решта методів залишається без змін
+    // Статуси акаунтів
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }
