@@ -12,13 +12,14 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository; // Репозиторій для пошуку користувачів
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+        // Ключовий метод - знаходить користувача по логіну
+        User user = userRepository.findByUsername(username) // Шукаємо в БД
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-
-        return user;
+                // Якщо не знайшли
+        return user; // Повертаємо користувача, Security перевірить пароль
     }
 }
